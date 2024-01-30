@@ -1,4 +1,25 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useForm } from 'vee-validate';
+import { toTypedSchema } from '@vee-validate/yup';
+import * as yup from 'yup';
+
+const schema = toTypedSchema(
+  yup.object({
+    email: yup.string().email().required(),
+  })
+);
+
+const { defineField, values, errors } = useForm({
+  validationSchema: schema,
+});
+
+const [email, emailAttrs] = defineField('email', {
+  validateOnModelUpdate: false,
+});
+const [password, passwordAttrs] = defineField('password', {
+  validateOnModelUpdate: false,
+});
+</script>
 <template>
   <form>
     <!-- Name -->
@@ -17,6 +38,8 @@
         type="email"
         class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
         placeholder="Enter Email"
+        v-model="email"
+        :emailAttrs="emailAttrs"
       />
     </div>
     <!-- Age -->
@@ -34,6 +57,8 @@
         type="password"
         class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
         placeholder="Password"
+        v-model="password"
+        :emailAttrs="passwordAttrs"
       />
     </div>
     <!-- Confirm Password -->
