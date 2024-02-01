@@ -2,10 +2,7 @@
 import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/yup';
 import { object, string, number, type InferType } from 'yup';
-
-defineProps<{
-  disableSubmit: boolean;
-}>();
+import { ref } from 'vue';
 
 const emit = defineEmits<{
   register: [values: RegisterFormValues];
@@ -34,11 +31,33 @@ const { handleSubmit } = useForm({
   },
 });
 
+const reg_in_submission = ref(false);
+const reg_show_alert = ref(false);
+const reg_alert_variant = ref('bg-blue-500');
+const reg_alert_msg = ref('Please wait! Your account is being created.');
+
 const onSubmit = handleSubmit((values) => {
+  reg_show_alert.value = true;
+  reg_in_submission.value = true;
+  reg_alert_variant.value = 'bg-blue-500';
+  reg_alert_msg.value = 'Please wait! Your account is being created.';
+
+  setTimeout(() => {
+    reg_alert_variant.value = 'bg-green-500';
+    reg_alert_msg.value = 'Success your account has been created!';
+    console.log(values);
+  }, 2000);
   emit('register', values);
 });
 </script>
 <template>
+  <div
+    v-if="reg_show_alert"
+    class="text-white text-center font-bold p-4 rounded mb-4"
+    :class="reg_alert_variant"
+  >
+    {{ reg_alert_msg }}
+  </div>
   <form @submit="onSubmit">
     <!-- Name -->
     <div class="mb-3">
@@ -122,8 +141,8 @@ const onSubmit = handleSubmit((values) => {
     <button
       type="submit"
       class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
-      :class="{ 'cursor-not-allowed disabled:opacity-75': disableSubmit }"
-      :disabled="disableSubmit"
+      :class="{ 'cursor-not-allowed disabled:opacity-75': reg_in_submission }"
+      :disabled="reg_in_submission"
     >
       Submit
     </button>

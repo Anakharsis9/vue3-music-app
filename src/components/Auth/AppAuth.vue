@@ -13,23 +13,7 @@ const tabs: {
 };
 const currentTab = ref('login');
 
-const reg_in_submission = ref(false);
-const reg_show_alert = ref(false);
-const reg_alert_variant = ref('bg-blue-500');
-const reg_alert_msg = ref('Please wait! Your account is being created.');
-
-function register(values: RegisterFormValues) {
-  reg_show_alert.value = true;
-  reg_in_submission.value = true;
-  reg_alert_variant.value = 'bg-blue-500';
-  reg_alert_msg.value = 'Please wait! Your account is being created.';
-
-  setTimeout(() => {
-    reg_alert_variant.value = 'bg-green-500';
-    reg_alert_msg.value = 'Success your account has been created!';
-    console.log(values);
-  }, 2000);
-}
+function register(values: RegisterFormValues) {}
 </script>
 
 <template>
@@ -87,19 +71,9 @@ function register(values: RegisterFormValues) {
               </a>
             </li>
           </ul>
-          <div
-            class="text-white text-center font-bold p-4 rounded mb-4"
-            v-if="reg_show_alert && currentTab === 'register'"
-            :class="reg_alert_variant"
-          >
-            {{ reg_alert_msg }}
-          </div>
+
           <KeepAlive>
-            <component
-              :is="tabs[currentTab]"
-              :disableSubmit="reg_in_submission"
-              @register="register"
-            />
+            <component :is="tabs[currentTab]" @register="register" />
           </KeepAlive>
         </div>
       </div>
