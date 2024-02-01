@@ -72,9 +72,7 @@ function register(values: RegisterFormValues) {}
             </li>
           </ul>
 
-          <KeepAlive>
-            <component :is="tabs[currentTab]" @register="register" />
-          </KeepAlive>
+          <component :is="tabs[currentTab]" @register="register" />
         </div>
       </div>
     </div>

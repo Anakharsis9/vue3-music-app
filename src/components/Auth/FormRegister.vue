@@ -4,6 +4,8 @@ import { toTypedSchema } from '@vee-validate/yup';
 import { object, string, number, type InferType } from 'yup';
 import { ref } from 'vue';
 
+import { auth, createUserWithEmailAndPassword, usersCollection, addDoc } from '@/includes/firebase';
+
 const emit = defineEmits<{
   register: [values: RegisterFormValues];
 }>();
@@ -36,17 +38,42 @@ const reg_show_alert = ref(false);
 const reg_alert_variant = ref('bg-blue-500');
 const reg_alert_msg = ref('Please wait! Your account is being created.');
 
-const onSubmit = handleSubmit((values) => {
+function handleError() {
+  reg_in_submission.value = false;
+  reg_alert_variant.value = 'bg-red-500';
+  reg_alert_msg.value = 'An unexpected error occurred. Please try again later.';
+}
+
+const onSubmit = handleSubmit(async (values) => {
   reg_show_alert.value = true;
   reg_in_submission.value = true;
   reg_alert_variant.value = 'bg-blue-500';
   reg_alert_msg.value = 'Please wait! Your account is being created.';
 
-  setTimeout(() => {
-    reg_alert_variant.value = 'bg-green-500';
-    reg_alert_msg.value = 'Success your account has been created!';
-    console.log(values);
-  }, 2000);
+  let userCred = null;
+
+  try {
+    userCred = await createUserWithEmailAndPassword(auth, values.email, values.password);
+  } catch (error) {
+    handleError();
+    return;
+  }
+  try {
+    await addDoc(usersCollection, {
+      name: values.name,
+      age: values.age,
+      country: values.country,
+      email: values.email,
+    });
+  } catch (error) {
+    handleError();
+    return;
+  }
+
+  reg_alert_variant.value = 'bg-green-500';
+  reg_alert_msg.value = 'Success your account has been created!';
+  console.log(userCred);
+
   emit('register', values);
 });
 </script>
