@@ -52,7 +52,7 @@ const onSubmit = handleSubmit(async (values) => {
 
   reg_alert_variant.value = 'bg-green-500';
   reg_alert_msg.value = 'Success your account has been created!';
-  reg_in_submission.value = false;
+  window.location.reload();
 });
 </script>
 <template>

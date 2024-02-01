@@ -3,10 +3,7 @@ import { ErrorMessage, useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/yup';
 import { object, string, type InferType } from 'yup';
 import { ref } from 'vue';
-
-const emit = defineEmits<{
-  login: [values: LoginFormValues];
-}>();
+import user from '@/stores/user';
 
 const schema = object({
   email: string().email().required(),
@@ -24,18 +21,26 @@ const login_show_alert = ref(false);
 const login_alert_variant = ref('bg-blue-500');
 const login_alert_msg = ref('Please wait! We are logging you in.');
 
-const onSubmit = handleSubmit((values) => {
+const userStore = user();
+
+const onSubmit = handleSubmit(async (values) => {
   login_show_alert.value = true;
   login_in_submission.value = true;
   login_alert_variant.value = 'bg-blue-500';
   login_alert_msg.value = 'Please wait! We are logging you in.';
 
-  setTimeout(() => {
-    login_alert_variant.value = 'bg-green-500';
-    login_alert_msg.value = 'Success! You are now logging in.';
-    console.log(values);
-  }, 2000);
-  emit('login', values);
+  try {
+    await userStore.authenticate(values);
+  } catch (error) {
+    login_in_submission.value = false;
+    login_alert_variant.value = 'bg-red-500';
+    login_alert_msg.value = 'Invalid login details.';
+    return;
+  }
+
+  login_alert_variant.value = 'bg-green-500';
+  login_alert_msg.value = 'Success! You are now logging in.';
+  window.location.reload();
 });
 </script>
 <template>
@@ -46,7 +51,7 @@ const onSubmit = handleSubmit((values) => {
   >
     {{ login_alert_msg }}
   </div>
-  <form @click="onSubmit">
+  <form @submit="onSubmit">
     <!-- Email -->
     <div class="mb-3">
       <label class="inline-block mb-2">Email</label>
