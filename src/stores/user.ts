@@ -33,9 +33,15 @@ export default defineStore('user', () => {
     userLoggedIn.value = true;
   }
 
+  async function signOut() {
+    await auth.signOut();
+    userLoggedIn.value = false;
+  }
+
   return {
     userLoggedIn,
     createUser,
     authenticate,
+    signOut,
   };
 });
