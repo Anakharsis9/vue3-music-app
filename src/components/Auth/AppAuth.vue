@@ -12,8 +12,6 @@ const tabs: {
   register: FormRegister,
 };
 const currentTab = ref('login');
-
-function register(values: RegisterFormValues) {}
 </script>
 
 <template>
@@ -72,7 +70,7 @@ function register(values: RegisterFormValues) {}
             </li>
           </ul>
 
-          <component :is="tabs[currentTab]" @register="register" />
+          <component :is="tabs[currentTab]" />
         </div>
       </div>
     </div>
