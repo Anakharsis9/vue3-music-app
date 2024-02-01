@@ -7,8 +7,10 @@ import {
   setDoc,
   doc,
   updateProfile,
+  signInWithEmailAndPassword,
 } from '@/includes/firebase';
 import type { RegisterFormValues } from '@/components/Auth/FormRegister.vue';
+import type { LoginFormValues } from '@/components/Auth/FormLogin.vue';
 
 export default defineStore('user', () => {
   const userLoggedIn = ref(false);
@@ -26,9 +28,14 @@ export default defineStore('user', () => {
     });
     userLoggedIn.value = true;
   }
+  async function authenticate(values: LoginFormValues) {
+    await signInWithEmailAndPassword(auth, values.email, values.password);
+    userLoggedIn.value = true;
+  }
 
   return {
     userLoggedIn,
     createUser,
+    authenticate,
   };
 });
