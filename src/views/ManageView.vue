@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import UploadFile from '@/components/Upload/UploadFile.vue';
+import UploadSongs from '@/components/Upload/UploadSongs.vue';
 </script>
 
 <template>
   <section class="container mx-auto mt-6">
     <div class="md:grid md:grid-cols-3 md:gap-4">
       <div class="col-span-1">
-        <upload-file />
+        <upload-songs />
       </div>
       <div class="col-span-2">
         <div class="bg-white rounded border border-gray-200 relative flex flex-col">

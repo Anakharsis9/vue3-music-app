@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 
 const emit = defineEmits<{
-  upload: [file: File];
+  upload: [files: File[]];
 }>();
 
 const is_dragover = ref(false);
@@ -13,15 +13,7 @@ function upload({ dataTransfer }: DragEvent) {
     return;
   }
   const files = [...dataTransfer.files];
-  files.forEach((file) => {
-    if (file.type !== 'audio/mpeg') {
-      return;
-    }
-  });
-  console.log(files);
-  // if (file) {
-  //   emit('upload', file);
-  // }
+  emit('upload', files);
 }
 </script>
 <template>
