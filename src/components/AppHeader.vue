@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import modalStore from '@/stores/modal';
-import user from '@/stores/user';
+import useUserStore from '@/stores/user';
 
 const store = modalStore();
-const userStore = user();
+const userStore = useUserStore();
 </script>
 
 <template>

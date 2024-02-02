@@ -3,7 +3,7 @@ import { ErrorMessage, useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/yup';
 import { object, string, type InferType } from 'yup';
 import { ref } from 'vue';
-import user from '@/stores/user';
+import useUserStore from '@/stores/user';
 
 const schema = object({
   email: string().email().required(),
@@ -21,7 +21,7 @@ const login_show_alert = ref(false);
 const login_alert_variant = ref('bg-blue-500');
 const login_alert_msg = ref('Please wait! We are logging you in.');
 
-const userStore = user();
+const userStore = useUserStore();
 
 const onSubmit = handleSubmit(async (values) => {
   login_show_alert.value = true;

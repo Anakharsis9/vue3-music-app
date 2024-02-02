@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import AppHeader from './components/AppHeader.vue';
 import AppAuth from './components/Auth/AppAuth.vue';
-import user from '@/stores/user';
+import useUserStore from '@/stores/user';
 import { auth } from '@/includes/firebase';
 
-const userStore = user();
+const userStore = useUserStore();
 if (auth.currentUser) {
   userStore.userLoggedIn = true;
 }

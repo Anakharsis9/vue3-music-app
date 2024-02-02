@@ -3,7 +3,7 @@ import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/yup';
 import { object, string, number, type InferType } from 'yup';
 import { ref } from 'vue';
-import user from '@/stores/user';
+import useUserStore from '@/stores/user';
 
 const schema = object({
   name: string().required().min(3).trim(),
@@ -33,7 +33,7 @@ const reg_show_alert = ref(false);
 const reg_alert_variant = ref('bg-blue-500');
 const reg_alert_msg = ref('Please wait! Your account is being created.');
 
-const userStore = user();
+const userStore = useUserStore();
 
 const onSubmit = handleSubmit(async (values) => {
   reg_show_alert.value = true;
