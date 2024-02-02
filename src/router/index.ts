@@ -3,6 +3,8 @@ import Home from '@/views/HomeView.vue';
 import About from '@/views/AboutView.vue';
 import Manage from '@/views/ManageView.vue';
 
+import useUserStore from '@/stores/user';
+
 const routes: RouteRecordRaw[] = [
   {
     name: 'home',
@@ -18,6 +20,12 @@ const routes: RouteRecordRaw[] = [
     name: 'manage',
     path: '/manage',
     component: Manage,
+    beforeEnter: () => {
+      const userStore = useUserStore();
+      if (!userStore.userLoggedIn) {
+        return { name: 'home' };
+      }
+    },
   },
   {
     path: '/:catchAll(.*)*',
