@@ -2,8 +2,19 @@
 import modalStore from '@/stores/modal';
 import useUserStore from '@/stores/user';
 
+import { useRouter, useRoute } from 'vue-router';
+
 const store = modalStore();
 const userStore = useUserStore();
+const router = useRouter();
+const route = useRoute();
+
+function signOut() {
+  userStore.signOut();
+  if (route.meta.requiredAuth) {
+    router.push({ name: 'home' });
+  }
+}
 </script>
 
 <template>
@@ -32,7 +43,7 @@ const userStore = useUserStore();
               <router-link class="px-2 text-white" :to="{ name: 'manage' }">Manage</router-link>
             </li>
             <li>
-              <a class="px-2 text-white" href="#" @click.prevent="userStore.signOut"> Logout</a>
+              <a class="px-2 text-white" href="#" @click.prevent="signOut"> Logout</a>
             </li>
           </template>
         </ul>

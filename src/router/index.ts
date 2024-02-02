@@ -20,6 +20,9 @@ const routes: RouteRecordRaw[] = [
     name: 'manage',
     path: '/manage',
     component: Manage,
+    meta: {
+      requiredAuth: true,
+    },
     beforeEnter: () => {
       const userStore = useUserStore();
       if (!userStore.userLoggedIn) {
