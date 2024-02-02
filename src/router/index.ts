@@ -19,6 +19,10 @@ const routes: RouteRecordRaw[] = [
     path: '/manage',
     component: Manage,
   },
+  {
+    path: '/:catchAll(.*)*',
+    redirect: { name: 'home' },
+  },
 ];
 
 const router = createRouter({
