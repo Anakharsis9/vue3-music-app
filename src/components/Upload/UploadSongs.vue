@@ -25,6 +25,10 @@ export type UploadFile = {
   text_class?: string;
 };
 
+const emit = defineEmits<{
+  songAdded: [];
+}>();
+
 const uploadingSongs: Ref<UploadFile[]> = ref([]);
 
 function upload(files: File[]) {
@@ -78,6 +82,8 @@ function upload(files: File[]) {
         uploadingSong.variant = 'bg-green-400';
         uploadingSong.icon = 'fas fa-check';
         uploadingSong.text_class = 'text-green-400';
+
+        emit('songAdded');
       }
     );
   });

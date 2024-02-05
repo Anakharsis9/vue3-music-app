@@ -10,8 +10,15 @@ import {
   getDocs,
   orderBy,
   updateDoc,
+  deleteDoc,
 } from 'firebase/firestore';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from 'firebase/storage';
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -59,4 +66,6 @@ export {
   getDocs,
   orderBy,
   updateDoc,
+  deleteDoc,
+  deleteObject,
 };
