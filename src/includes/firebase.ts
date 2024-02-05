@@ -1,5 +1,15 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, setDoc, doc, addDoc } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  setDoc,
+  doc,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  orderBy,
+} from 'firebase/firestore';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import {
   getAuth,
@@ -43,4 +53,8 @@ export {
   getDownloadURL,
   songsCollection,
   addDoc,
+  query,
+  where,
+  getDocs,
+  orderBy,
 };
