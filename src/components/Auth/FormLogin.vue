@@ -16,40 +16,40 @@ const { handleSubmit } = useForm({
   validationSchema: toTypedSchema(schema),
 });
 
-const login_in_submission = ref(false);
-const login_show_alert = ref(false);
-const login_alert_variant = ref('bg-blue-500');
-const login_alert_msg = ref('Please wait! We are logging you in.');
+const in_submission = ref(false);
+const show_alert = ref(false);
+const alert_variant = ref('bg-blue-500');
+const alert_msg = ref('Please wait! We are logging you in.');
 
 const userStore = useUserStore();
 
 const onSubmit = handleSubmit(async (values) => {
-  login_show_alert.value = true;
-  login_in_submission.value = true;
-  login_alert_variant.value = 'bg-blue-500';
-  login_alert_msg.value = 'Please wait! We are logging you in.';
+  show_alert.value = true;
+  in_submission.value = true;
+  alert_variant.value = 'bg-blue-500';
+  alert_msg.value = 'Please wait! We are logging you in.';
 
   try {
     await userStore.authenticate(values);
   } catch (error) {
-    login_in_submission.value = false;
-    login_alert_variant.value = 'bg-red-500';
-    login_alert_msg.value = 'Invalid login details.';
+    in_submission.value = false;
+    alert_variant.value = 'bg-red-500';
+    alert_msg.value = 'Invalid login details.';
     return;
   }
 
-  login_alert_variant.value = 'bg-green-500';
-  login_alert_msg.value = 'Success! You are now logging in.';
+  alert_variant.value = 'bg-green-500';
+  alert_msg.value = 'Success! You are now logging in.';
   window.location.reload();
 });
 </script>
 <template>
   <div
-    v-if="login_show_alert"
+    v-if="show_alert"
     class="text-white text-center font-bold p-4 rounded mb-4"
-    :class="login_alert_variant"
+    :class="alert_variant"
   >
-    {{ login_alert_msg }}
+    {{ alert_msg }}
   </div>
   <form @submit="onSubmit">
     <!-- Email -->
@@ -77,8 +77,8 @@ const onSubmit = handleSubmit(async (values) => {
     <button
       type="submit"
       class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
-      :class="{ 'cursor-not-allowed disabled:opacity-75': login_in_submission }"
-      :disabled="login_in_submission"
+      :class="{ 'cursor-not-allowed disabled:opacity-75': in_submission }"
+      :disabled="in_submission"
     >
       Submit
     </button>

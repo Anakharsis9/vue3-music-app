@@ -28,40 +28,40 @@ const { handleSubmit } = useForm({
   },
 });
 
-const reg_in_submission = ref(false);
-const reg_show_alert = ref(false);
-const reg_alert_variant = ref('bg-blue-500');
-const reg_alert_msg = ref('Please wait! Your account is being created.');
+const in_submission = ref(false);
+const show_alert = ref(false);
+const alert_variant = ref('bg-blue-500');
+const alert_msg = ref('Please wait! Your account is being created.');
 
 const userStore = useUserStore();
 
 const onSubmit = handleSubmit(async (values) => {
-  reg_show_alert.value = true;
-  reg_in_submission.value = true;
-  reg_alert_variant.value = 'bg-blue-500';
-  reg_alert_msg.value = 'Please wait! Your account is being created.';
+  show_alert.value = true;
+  in_submission.value = true;
+  alert_variant.value = 'bg-blue-500';
+  alert_msg.value = 'Please wait! Your account is being created.';
 
   try {
     await userStore.createUser(values);
   } catch (error) {
-    reg_in_submission.value = false;
-    reg_alert_variant.value = 'bg-red-500';
-    reg_alert_msg.value = 'An unexpected error occurred. Please try again later.';
+    in_submission.value = false;
+    alert_variant.value = 'bg-red-500';
+    alert_msg.value = 'An unexpected error occurred. Please try again later.';
     return;
   }
 
-  reg_alert_variant.value = 'bg-green-500';
-  reg_alert_msg.value = 'Success your account has been created!';
+  alert_variant.value = 'bg-green-500';
+  alert_msg.value = 'Success your account has been created!';
   window.location.reload();
 });
 </script>
 <template>
   <div
-    v-if="reg_show_alert"
+    v-if="show_alert"
     class="text-white text-center font-bold p-4 rounded mb-4"
-    :class="reg_alert_variant"
+    :class="alert_variant"
   >
-    {{ reg_alert_msg }}
+    {{ alert_msg }}
   </div>
   <form @submit="onSubmit">
     <!-- Name -->
@@ -146,8 +146,8 @@ const onSubmit = handleSubmit(async (values) => {
     <button
       type="submit"
       class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
-      :class="{ 'cursor-not-allowed disabled:opacity-75': reg_in_submission }"
-      :disabled="reg_in_submission"
+      :class="{ 'cursor-not-allowed disabled:opacity-75': in_submission }"
+      :disabled="in_submission"
     >
       Submit
     </button>
