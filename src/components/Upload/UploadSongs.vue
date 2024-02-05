@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
-import { storageRef, ref as fref, uploadBytesResumable } from '@/includes/firebase';
+import {
+  storageRef,
+  ref as fref,
+  uploadBytesResumable,
+  auth,
+  getDownloadURL,
+  songsCollection,
+  addDoc,
+} from '@/includes/firebase';
 
 import UploadDropbox from './UploadDropbox.vue';
 import ProgressBar from './ProgressBar.vue';
@@ -43,17 +51,31 @@ function upload(files: File[]) {
         uploadingSongs.value[uploadIndex].progress = progress;
       },
       (error) => {
-        const song = uploadingSongs.value[uploadIndex];
-        song.variant = 'bg-red-400';
-        song.icon = 'fas fa-times';
-        song.text_class = 'text-red-400';
+        const uploadingSong = uploadingSongs.value[uploadIndex];
+        uploadingSong.variant = 'bg-red-400';
+        uploadingSong.icon = 'fas fa-times';
+        uploadingSong.text_class = 'text-red-400';
         console.log(error);
       },
-      () => {
-        const song = uploadingSongs.value[uploadIndex];
-        song.variant = 'bg-green-400';
-        song.icon = 'fas fa-check';
-        song.text_class = 'text-green-400';
+      async () => {
+        const song = {
+          uuid: auth.currentUser!.uid,
+          display_name: auth.currentUser!.displayName,
+          original_name: task.snapshot.ref.name,
+          modified_name: task.snapshot.ref.name,
+          genre: '',
+          comment_count: 0,
+          url: '',
+        };
+
+        song.url = await getDownloadURL(task.snapshot.ref);
+
+        await addDoc(songsCollection, song);
+
+        const uploadingSong = uploadingSongs.value[uploadIndex];
+        uploadingSong.variant = 'bg-green-400';
+        uploadingSong.icon = 'fas fa-check';
+        uploadingSong.text_class = 'text-green-400';
       }
     );
   });

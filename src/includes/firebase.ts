@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, setDoc, doc } from 'firebase/firestore';
-import { getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { getFirestore, collection, setDoc, doc, addDoc } from 'firebase/firestore';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -19,8 +19,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
+
 const db = getFirestore(app);
 const usersCollection = collection(db, 'users');
+const songsCollection = collection(db, 'songs');
 
 const storage = getStorage(app);
 const storageRef = ref(storage);
@@ -38,4 +40,7 @@ export {
   storageRef,
   ref,
   uploadBytesResumable,
+  getDownloadURL,
+  songsCollection,
+  addDoc,
 };
