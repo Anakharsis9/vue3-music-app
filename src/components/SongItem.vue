@@ -4,13 +4,22 @@ import type { Song } from './types';
 import { useForm, ErrorMessage } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/yup';
 import { object, string, type InferType } from 'yup';
-import { doc, songsCollection, updateDoc } from '@/includes/firebase';
+import {
+  doc,
+  songsCollection,
+  updateDoc,
+  deleteDoc,
+  storageRef,
+  ref as fref,
+  deleteObject,
+} from '@/includes/firebase';
 
 const props = defineProps<{
   song: Song;
 }>();
 const emit = defineEmits<{
   updateSong: [values: SongFormValues];
+  removeSong: [];
 }>();
 
 const isEditing = ref(false);
@@ -29,12 +38,12 @@ const { handleSubmit } = useForm({
   },
 });
 
-function deleteSong() {}
-
 const in_submission = ref(false);
 const show_alert = ref(false);
 const alert_variant = ref('bg-blue-500');
 const alert_msg = ref('Please wait! Updating song info.');
+
+const songRef = doc(songsCollection, props.song.id);
 
 const updateSong = handleSubmit(async (values) => {
   show_alert.value = true;
@@ -43,7 +52,6 @@ const updateSong = handleSubmit(async (values) => {
   alert_msg.value = 'Please wait! Updating song info.';
 
   try {
-    const songRef = doc(songsCollection, props.song.id);
     await updateDoc(songRef, {
       modified_name: values.title,
       genre: values.genre,
@@ -62,6 +70,17 @@ const updateSong = handleSubmit(async (values) => {
   alert_msg.value = 'Success! Song updated.';
   isEditing.value = false;
 });
+
+async function deleteSong() {
+  const songStorageRef = fref(storageRef, `songs/${props.song.original_name}`);
+  try {
+    await deleteObject(songStorageRef);
+    await deleteDoc(songRef);
+    emit('removeSong');
+  } catch (error) {
+    console.error(error);
+  }
+}
 </script>
 
 <template>

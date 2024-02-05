@@ -27,13 +27,16 @@ function updateSong(i: number, values: SongFormValues) {
   song.modified_name = values.title;
   song.genre = values.genre ?? '';
 }
+function removeSong(i: number) {
+  userSongs.value.splice(i, 1);
+}
 </script>
 
 <template>
   <section class="container mx-auto mt-6">
     <div class="md:grid md:grid-cols-3 md:gap-4">
       <div class="col-span-1">
-        <upload-songs />
+        <upload-songs @songAdded="loadUserSongs" />
       </div>
       <div class="col-span-2">
         <div class="bg-white rounded border border-gray-200 relative flex flex-col">
@@ -48,6 +51,7 @@ function updateSong(i: number, values: SongFormValues) {
               :key="song.id"
               :song="song"
               @updateSong="updateSong(i, $event)"
+              @removeSong="removeSong(i)"
             />
           </div>
         </div>
