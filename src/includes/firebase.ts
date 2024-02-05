@@ -9,6 +9,7 @@ import {
   where,
   getDocs,
   orderBy,
+  updateDoc,
 } from 'firebase/firestore';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import {
@@ -57,4 +58,5 @@ export {
   where,
   getDocs,
   orderBy,
+  updateDoc,
 };

@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import UploadSongs from '@/components/Upload/UploadSongs.vue';
-import SongItem from '@/components/SongItem.vue';
+import SongItem, { type SongFormValues } from '@/components/SongItem.vue';
 import type { Song } from '@/components/types';
 import { getDocs, songsCollection, query, where, auth, orderBy } from '@/includes/firebase';
 import { ref, type Ref } from 'vue';
-// import { doc } from 'firebase/firestore';
 
 const userSongsQuery = query(
   songsCollection,
@@ -22,6 +21,12 @@ async function loadUserSongs(): Promise<void> {
   })) as Song[];
 }
 loadUserSongs();
+
+function updateSong(i: number, values: SongFormValues) {
+  const song = userSongs.value[i];
+  song.modified_name = values.title;
+  song.genre = values.genre ?? '';
+}
 </script>
 
 <template>
@@ -38,7 +43,12 @@ loadUserSongs();
           </div>
           <div class="p-6">
             <!-- Composition Items -->
-            <song-item v-for="song in userSongs" :key="song.id" :song="song" />
+            <song-item
+              v-for="(song, i) in userSongs"
+              :key="song.id"
+              :song="song"
+              @updateSong="updateSong(i, $event)"
+            />
           </div>
         </div>
       </div>
