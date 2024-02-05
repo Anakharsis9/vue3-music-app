@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue';
+import { onBeforeUnmount, ref, type Ref } from 'vue';
 import {
   storageRef,
   ref as fref,
@@ -80,6 +80,13 @@ function upload(files: File[]) {
     );
   });
 }
+
+onBeforeUnmount(() => {
+  uploadingSongs.value.forEach((upload) => {
+    if (!upload) return;
+    upload.task?.cancel();
+  });
+});
 </script>
 <template>
   <div class="bg-white rounded border border-gray-200 relative flex flex-col">
@@ -90,6 +97,11 @@ function upload(files: File[]) {
     <div class="p-6">
       <!-- Upload Dropbox -->
       <upload-dropbox @upload="upload" />
+      <input
+        type="file"
+        multiple
+        @change="upload([...($event.target as HTMLInputElement).files!])"
+      />
       <hr class="my-6" />
       <!-- Progess Bars -->
       <progress-bar v-for="song in uploadingSongs" :key="song.name" :upload="song" />
