@@ -9,10 +9,12 @@ import {
   songsCollection,
   addDoc,
 } from '@/includes/firebase';
+import type { UploadTask } from 'firebase/storage';
+
+import type { Song } from '@/components/types';
 
 import UploadDropbox from './UploadDropbox.vue';
 import ProgressBar from './ProgressBar.vue';
-import type { UploadTask } from 'firebase/storage';
 
 export type UploadFile = {
   task?: UploadTask;
@@ -58,8 +60,8 @@ function upload(files: File[]) {
         console.log(error);
       },
       async () => {
-        const song = {
-          uuid: auth.currentUser!.uid,
+        const song: Song = {
+          uid: auth.currentUser!.uid,
           display_name: auth.currentUser!.displayName,
           original_name: task.snapshot.ref.name,
           modified_name: task.snapshot.ref.name,
