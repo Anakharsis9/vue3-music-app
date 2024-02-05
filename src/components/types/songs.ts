@@ -1,4 +1,5 @@
 export type Song = {
+  id?: string;
   uid: string;
   display_name: string | null;
   original_name: string;

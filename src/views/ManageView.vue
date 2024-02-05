@@ -4,6 +4,7 @@ import SongItem from '@/components/SongItem.vue';
 import type { Song } from '@/components/types';
 import { getDocs, songsCollection, query, where, auth, orderBy } from '@/includes/firebase';
 import { ref, type Ref } from 'vue';
+// import { doc } from 'firebase/firestore';
 
 const userSongsQuery = query(
   songsCollection,
@@ -15,7 +16,10 @@ const userSongs: Ref<Song[]> = ref([]);
 
 async function loadUserSongs(): Promise<void> {
   const userSongsSnapshot = await getDocs(userSongsQuery);
-  userSongs.value = userSongsSnapshot.docs.map((doc) => doc.data()) as Song[];
+  userSongs.value = userSongsSnapshot.docs.map((doc) => ({
+    ...doc.data(),
+    id: doc.id,
+  })) as Song[];
 }
 loadUserSongs();
 </script>
@@ -34,7 +38,7 @@ loadUserSongs();
           </div>
           <div class="p-6">
             <!-- Composition Items -->
-            <song-item v-for="song in userSongs" :key="song.original_name" :song="song" />
+            <song-item v-for="song in userSongs" :key="song.id" :song="song" />
           </div>
         </div>
       </div>
