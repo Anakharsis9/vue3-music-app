@@ -2,7 +2,7 @@
 import modalStore from '@/stores/modal';
 import { ref, type Component } from 'vue';
 import FormLogin from './FormLogin.vue';
-import FormRegister, { type RegisterFormValues } from './FormRegister.vue';
+import FormRegister from './FormRegister.vue';
 
 const store = modalStore();
 const tabs: {
