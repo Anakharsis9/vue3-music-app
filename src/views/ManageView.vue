@@ -45,14 +45,16 @@ function removeSong(i: number) {
             <i class="fa fa-compact-disc float-right text-green-400 text-2xl"></i>
           </div>
           <div class="p-6">
-            <!-- Composition Items -->
-            <song-item
-              v-for="(song, i) in userSongs"
-              :key="song.id"
-              :song="song"
-              @updateSong="updateSong(i, $event)"
-              @removeSong="removeSong(i)"
-            />
+            <div v-if="userSongs.length === 0" class="text-center text-gray-500">List empty</div>
+            <template v-else>
+              <song-item
+                v-for="(song, i) in userSongs"
+                :key="song.id"
+                :song="song"
+                @updateSong="updateSong(i, $event)"
+                @removeSong="removeSong(i)"
+              />
+            </template>
           </div>
         </div>
       </div>
