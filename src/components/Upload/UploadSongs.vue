@@ -45,7 +45,6 @@ function upload(files: File[]) {
     const fileHash = await getFileHash(file);
 
     const isExists = props.userSongs.find((song) => song.hash === fileHash);
-
     if (isExists) {
       uploadingSongs.value.push({
         name: file.name,
@@ -59,17 +58,38 @@ function upload(files: File[]) {
     }
 
     const songsRef = fref(storageRef, `songs/${fileHash}`);
-    const task = uploadBytesResumable(songsRef, file);
+    const isExistsInStorage = await getDownloadURL(songsRef)
+      .then(() => true)
+      .catch(() => false);
 
+    const song: Song = {
+      uid: auth.currentUser!.uid,
+      display_name: auth.currentUser!.displayName,
+      original_name: file.name,
+      modified_name: file.name,
+      genre: '',
+      comment_count: 0,
+      url: '',
+      hash: fileHash,
+    };
     const uploadIndex =
       uploadingSongs.value.push({
-        task,
         name: file.name,
         progress: 0,
         variant: 'bg-blue-400',
         icon: 'fas fa-spinner fa-spin',
         text_class: '',
       }) - 1;
+
+    if (isExistsInStorage) {
+      uploadingSongs.value[uploadIndex].progress = 100;
+      song.url = await getDownloadURL(songsRef);
+      await successUpload(song, uploadIndex);
+      return;
+    }
+
+    const task = uploadBytesResumable(songsRef, file);
+    uploadingSongs.value[uploadIndex].task = task;
 
     task.on(
       'state_changed',
@@ -86,30 +106,23 @@ function upload(files: File[]) {
         console.log(error);
       },
       async () => {
-        const song: Song = {
-          uid: auth.currentUser!.uid,
-          display_name: auth.currentUser!.displayName,
-          original_name: file.name,
-          modified_name: file.name,
-          genre: '',
-          comment_count: 0,
-          url: '',
-          hash: fileHash,
-        };
-
         song.url = await getDownloadURL(task.snapshot.ref);
 
-        await addDoc(songsCollection, song);
-
-        const uploadingSong = uploadingSongs.value[uploadIndex];
-        uploadingSong.variant = 'bg-green-400';
-        uploadingSong.icon = 'fas fa-check';
-        uploadingSong.text_class = 'text-green-400';
-
-        emit('songAdded');
+        await successUpload(song, uploadIndex);
       }
     );
   });
+}
+
+async function successUpload(song: Song, uploadIndex: number) {
+  await addDoc(songsCollection, song);
+
+  const uploadingSong = uploadingSongs.value[uploadIndex];
+  uploadingSong.variant = 'bg-green-400';
+  uploadingSong.icon = 'fas fa-check';
+  uploadingSong.text_class = 'text-green-400';
+
+  emit('songAdded');
 }
 
 onBeforeUnmount(() => {
