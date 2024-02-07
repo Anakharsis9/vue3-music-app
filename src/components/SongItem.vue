@@ -72,7 +72,7 @@ const updateSong = handleSubmit(async (values) => {
 });
 
 async function deleteSong() {
-  const songStorageRef = fref(storageRef, `songs/${props.song.original_name}`);
+  const songStorageRef = fref(storageRef, `songs/${props.song.hash}`);
   try {
     await deleteObject(songStorageRef);
     await deleteDoc(songRef);

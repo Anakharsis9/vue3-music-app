@@ -23,6 +23,9 @@ defineProps<{
         }"
       ></div>
     </div>
+    <div v-if="upload.errorMessage" class="text-red-600 text-xs">
+      {{ upload.errorMessage }}
+    </div>
   </div>
 </template>
 

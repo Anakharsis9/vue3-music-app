@@ -28,7 +28,10 @@ function upload({ dataTransfer }: DragEvent) {
     @dragleave.prevent.stop="is_dragover = false"
     @drop.prevent.stop="upload($event)"
   >
-    <h5>Drop your files here</h5>
+    <h5>
+      Drop your files here
+      <pre>(max size 10 MB)</pre>
+    </h5>
   </div>
 </template>
 

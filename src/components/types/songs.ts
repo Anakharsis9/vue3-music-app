@@ -7,4 +7,5 @@ export type Song = {
   genre: string;
   comment_count: number;
   url: string;
+  hash: string;
 };
