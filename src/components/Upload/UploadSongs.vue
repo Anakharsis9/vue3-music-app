@@ -82,6 +82,7 @@ function upload(files: File[]) {
       }) - 1;
 
     if (isExistsInStorage) {
+      //update users array
       uploadingSongs.value[uploadIndex].progress = 100;
       song.url = await getDownloadURL(songsRef);
       await successUpload(song, uploadIndex);
@@ -106,6 +107,7 @@ function upload(files: File[]) {
         console.log(error);
       },
       async () => {
+        //add new doc
         song.url = await getDownloadURL(task.snapshot.ref);
 
         await successUpload(song, uploadIndex);

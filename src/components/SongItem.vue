@@ -12,6 +12,9 @@ import {
   storageRef,
   ref as fref,
   deleteObject,
+  query,
+  where,
+  getDocs,
 } from '@/includes/firebase';
 
 const props = defineProps<{
@@ -72,10 +75,15 @@ const updateSong = handleSubmit(async (values) => {
 });
 
 async function deleteSong() {
+  const songsByHashQuery = query(songsCollection, where('hash', '==', props.song.hash));
   const songStorageRef = fref(storageRef, `songs/${props.song.hash}`);
   try {
-    await deleteObject(songStorageRef);
     await deleteDoc(songRef);
+
+    const songsByHash = await getDocs(songsByHashQuery);
+    if (songsByHash.docs.length === 0) {
+      await deleteObject(songStorageRef);
+    }
     emit('removeSong');
   } catch (error) {
     console.error(error);
