@@ -16,6 +16,7 @@ import {
   where,
   getDocs,
 } from '@/includes/firebase';
+import DeleteConfirmDialog from './DeleteConfirmDialog.vue';
 
 const props = defineProps<{
   song: Song;
@@ -74,10 +75,14 @@ const updateSong = handleSubmit(async (values) => {
   isEditing.value = false;
 });
 
+const showDeleteDialog = ref(false);
+const deleteLoading = ref(false);
+
 async function deleteSong() {
   const songsByHashQuery = query(songsCollection, where('hash', '==', props.song.hash));
   const songStorageRef = fref(storageRef, `songs/${props.song.hash}`);
   try {
+    deleteLoading.value = true;
     await deleteDoc(songRef);
 
     const songsByHash = await getDocs(songsByHashQuery);
@@ -87,6 +92,8 @@ async function deleteSong() {
     emit('removeSong');
   } catch (error) {
     console.error(error);
+  } finally {
+    deleteLoading.value = false;
   }
 }
 </script>
@@ -97,7 +104,7 @@ async function deleteSong() {
       <h4 class="inline-block text-2xl font-bold">{{ song.modified_name }}</h4>
       <button
         class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
-        @click="deleteSong"
+        @click="showDeleteDialog = true"
       >
         <i class="fas fa-trash"></i>
       </button>
@@ -154,6 +161,13 @@ async function deleteSong() {
       </form>
     </div>
   </div>
+  <delete-confirm-dialog
+    v-if="showDeleteDialog"
+    :text="props.song.modified_name"
+    :loading="deleteLoading"
+    @close="showDeleteDialog = false"
+    @confirm="deleteSong"
+  />
 </template>
 
 <style scoped></style>
