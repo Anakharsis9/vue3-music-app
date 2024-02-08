@@ -4,19 +4,10 @@ import type { Song } from './types';
 import { useForm, ErrorMessage } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/yup';
 import { object, string, type InferType } from 'yup';
-import {
-  doc,
-  songsCollection,
-  updateDoc,
-  deleteDoc,
-  storageRef,
-  ref as fref,
-  deleteObject,
-  query,
-  where,
-  getDocs,
-} from '@/includes/firebase';
+import { songsCollection, storageRef } from '@/includes/firebase';
 import DeleteConfirmDialog from './DeleteConfirmDialog.vue';
+import { doc, updateDoc, query, where, deleteDoc, getDocs } from 'firebase/firestore';
+import { deleteObject, ref as fref } from 'firebase/storage';
 
 const props = defineProps<{
   song: Song;

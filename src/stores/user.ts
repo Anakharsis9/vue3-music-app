@@ -1,16 +1,14 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import {
-  auth,
-  createUserWithEmailAndPassword,
-  usersCollection,
-  setDoc,
-  doc,
-  updateProfile,
-  signInWithEmailAndPassword,
-} from '@/includes/firebase';
+import { auth, usersCollection } from '@/includes/firebase';
 import type { RegisterFormValues } from '@/components/Auth/FormRegister.vue';
 import type { LoginFormValues } from '@/components/Auth/FormLogin.vue';
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { setDoc, doc } from 'firebase/firestore';
 
 export default defineStore('user', () => {
   const userLoggedIn = ref(false);

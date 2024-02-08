@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref, type Ref } from 'vue';
+import { auth, songsCollection, storageRef } from '@/includes/firebase';
+import { addDoc } from 'firebase/firestore';
 import {
-  storageRef,
-  ref as fref,
-  uploadBytesResumable,
-  auth,
   getDownloadURL,
-  songsCollection,
-  addDoc,
-} from '@/includes/firebase';
-import type { UploadTask } from 'firebase/storage';
+  uploadBytesResumable,
+  ref as fref,
+  type UploadTask,
+} from 'firebase/storage';
+
 import type { Song } from '@/components/types';
 import { getFileHash } from '@/utils/fileHash';
 

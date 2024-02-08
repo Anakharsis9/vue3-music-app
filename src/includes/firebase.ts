@@ -1,30 +1,7 @@
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  setDoc,
-  doc,
-  addDoc,
-  query,
-  where,
-  getDocs,
-  orderBy,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from 'firebase/storage';
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  updateProfile,
-  signInWithEmailAndPassword,
-} from 'firebase/auth';
+import { getFirestore, collection } from 'firebase/firestore';
+import { getStorage, ref } from 'firebase/storage';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC9FPcO5ItIwZBUxEyb9smNb-6-muxbrj0',
@@ -45,27 +22,4 @@ const songsCollection = collection(db, 'songs');
 const storage = getStorage(app);
 const storageRef = ref(storage);
 
-export {
-  auth,
-  db,
-  usersCollection,
-  setDoc,
-  doc,
-  createUserWithEmailAndPassword,
-  updateProfile,
-  signInWithEmailAndPassword,
-  storage,
-  storageRef,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  songsCollection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-  orderBy,
-  updateDoc,
-  deleteDoc,
-  deleteObject,
-};
+export { auth, db, usersCollection, songsCollection, storage, storageRef };

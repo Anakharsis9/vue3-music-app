@@ -2,7 +2,8 @@
 import UploadSongs from '@/components/Upload/UploadSongs.vue';
 import UserSongItem, { type SongFormValues } from '@/components/UserSongItem.vue';
 import type { Song } from '@/components/types';
-import { getDocs, songsCollection, query, where, auth, orderBy } from '@/includes/firebase';
+import { songsCollection, auth } from '@/includes/firebase';
+import { query, where, orderBy, getDocs } from 'firebase/firestore';
 import { ref, type Ref } from 'vue';
 
 const userSongsQuery = query(
