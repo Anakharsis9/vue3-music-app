@@ -65,6 +65,10 @@ const onSubmit = handleSubmit(async (values, { resetForm }) => {
   alert_variant.value = 'bg-green-500';
   alert_msg.value = 'Success! Comment added!';
   resetForm();
+
+  setTimeout(() => {
+    show_alert.value = false;
+  }, 2000);
 });
 </script>
 

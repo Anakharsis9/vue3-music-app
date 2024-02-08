@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { Song } from '@/components/types';
 import { commentsCollection, songsCollection } from '@/includes/firebase';
-import { getDoc, doc, getDocs, query, where } from 'firebase/firestore';
-import { ref, type Ref } from 'vue';
+import { getDoc, doc, getDocs, query, where, updateDoc } from 'firebase/firestore';
+import { computed, ref, watch, type Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { Comment } from '@/components/Comment/CommentForm.vue';
 
@@ -38,6 +38,44 @@ async function loadComments() {
   })) as Comment[];
 }
 loadComments();
+
+async function addComment() {
+  if (!song.value) {
+    return;
+  }
+  song.value.comment_count += 1;
+  await updateDoc(doc(songsCollection, songId), {
+    comment_count: song.value.comment_count,
+  });
+  loadComments();
+}
+
+const sortBy = ref(route.query.sortBy ? route.query.sortBy : 'latest');
+const sortedComments = computed(() => {
+  return comments.value.slice().sort((a, b) => {
+    const aDate = new Date(a.date_posted).getTime();
+    const bDate = new Date(b.date_posted).getTime();
+
+    if (sortBy.value === 'latest') {
+      return bDate - aDate;
+    }
+    return aDate - bDate;
+  });
+});
+watch(
+  sortBy,
+  (newVal) => {
+    if (newVal === route.query.sortBy) {
+      return;
+    }
+    router.push({
+      query: {
+        sortBy: newVal,
+      },
+    });
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -71,20 +109,21 @@ loadComments();
       </div>
       <div class="p-6">
         <!-- Form -->
-        <comment-form v-if="userStore.userLoggedIn" @addComment="loadComments" />
+        <comment-form v-if="userStore.userLoggedIn" @addComment="addComment" />
         <!-- Sort Comments -->
         <select
           class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+          v-model="sortBy"
         >
-          <option value="1">Latest</option>
-          <option value="2">Oldest</option>
+          <option value="latest">Latest</option>
+          <option value="oldest">Oldest</option>
         </select>
       </div>
     </div>
   </section>
   <!-- Comments -->
   <ul class="container mx-auto">
-    <comment-item v-for="comment in comments" :key="comment.id" :comment="comment" />
+    <comment-item v-for="comment in sortedComments" :key="comment.id" :comment="comment" />
   </ul>
 </template>
 
