@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UploadSongs from '@/components/Upload/UploadSongs.vue';
-import SongItem, { type SongFormValues } from '@/components/SongItem.vue';
+import UserSongItem, { type SongFormValues } from '@/components/UserSongItem.vue';
 import type { Song } from '@/components/types';
 import { getDocs, songsCollection, query, where, auth, orderBy } from '@/includes/firebase';
 import { ref, type Ref } from 'vue';
@@ -47,7 +47,7 @@ function removeSong(i: number) {
           <div class="p-6">
             <div v-if="userSongs.length === 0" class="text-center text-gray-500">List empty</div>
             <template v-else>
-              <song-item
+              <user-song-item
                 v-for="(song, i) in userSongs"
                 :key="song.id"
                 :song="song"
