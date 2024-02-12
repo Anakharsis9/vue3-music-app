@@ -9,6 +9,7 @@ import type { Comment } from '@/components/Comment/CommentForm.vue';
 import CommentForm from '@/components/Comment/CommentForm.vue';
 import CommentItem from '@/components/Comment/CommentItem.vue';
 import useUserStore from '@/stores/user';
+import usePlayerStore from '@/stores/player';
 
 const userStore = useUserStore();
 
@@ -76,6 +77,13 @@ watch(
   },
   { immediate: true }
 );
+
+const playerStore = usePlayerStore();
+function newSong() {
+  if (song.value) {
+    playerStore.newSong(song.value);
+  }
+}
 </script>
 
 <template>
@@ -90,6 +98,7 @@ watch(
       <button
         type="button"
         class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
+        @click.prevent="newSong"
       >
         <i class="fas fa-play"></i>
       </button>
