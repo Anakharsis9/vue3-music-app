@@ -42,14 +42,31 @@ export default defineStore('player', () => {
   }
 
   function updateProgress() {
-    seek.value = formatTime(sound.value!.seek());
-    duration.value = formatTime(sound.value!.duration());
+    if (!sound.value) return;
 
-    progress.value = `${(sound.value!.seek() / sound.value!.duration()) * 100}%`;
+    seek.value = formatTime(sound.value.seek());
+    duration.value = formatTime(sound.value.duration());
 
-    if (sound.value!.playing()) {
+    progress.value = `${(sound.value.seek() / sound.value.duration()) * 100}%`;
+
+    if (sound.value.playing()) {
       requestAnimationFrame(updateProgress);
     }
+  }
+
+  function updateSeek(event: MouseEvent) {
+    if (!sound.value?.playing || !event.currentTarget || !sound.value) {
+      return;
+    }
+    const { x, width } = (event.currentTarget as Element).getBoundingClientRect();
+    const clickX = event.clientX - x;
+    const percentage = clickX / width;
+    const seconds = sound.value.duration() * percentage;
+
+    sound.value.once('seek', () => {
+      requestAnimationFrame(updateProgress);
+    });
+    sound.value.seek(seconds);
   }
 
   const isPlaying = computed(() => {
@@ -68,5 +85,6 @@ export default defineStore('player', () => {
     seek,
     duration,
     progress,
+    updateSeek,
   };
 });
