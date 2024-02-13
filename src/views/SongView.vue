@@ -78,10 +78,10 @@ watch(
   { immediate: true }
 );
 
-const playerStore = usePlayerStore();
+const player = usePlayerStore();
 function newSong() {
   if (song.value) {
-    playerStore.newSong(song.value);
+    player.newSong(song.value);
   }
 }
 </script>
@@ -100,7 +100,13 @@ function newSong() {
         class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
         @click.prevent="newSong"
       >
-        <i class="fas fa-play"></i>
+        <i
+          class="fas"
+          :class="{
+            'fa-play': !player.isPlaying,
+            'fa-pause': player.isPlaying,
+          }"
+        ></i>
       </button>
       <div class="z-50 text-left ml-8">
         <!-- Song Info -->
