@@ -11,7 +11,7 @@ const player = usePlayerStore();
 const isCurrentSong = computed(() => player.current_song?.id === props.song.id);
 
 function newSong() {
-  if (player.isPlaying && isCurrentSong) {
+  if (player.isPlaying && isCurrentSong.value) {
     player.toggleAudio();
     return;
   }
