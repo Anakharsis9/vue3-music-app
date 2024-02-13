@@ -26,7 +26,8 @@ async function loadSong() {
     router.push({ name: 'home' });
     return;
   }
-  song.value = snapshot.data() as Song;
+
+  song.value = { ...snapshot.data(), id: snapshot.id } as Song;
 }
 loadSong();
 
