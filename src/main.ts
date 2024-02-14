@@ -1,5 +1,6 @@
 import './assets/base.css';
 import './assets/main.css';
+import 'nprogress/nprogress.css';
 
 import { createApp } from 'vue';
 import type { App as Application } from 'vue';

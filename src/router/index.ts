@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
-
 import useUserStore from '@/stores/user';
+import NProgress from 'nprogress';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -43,5 +43,11 @@ const router = createRouter({
   routes,
   linkExactActiveClass: 'text-yellow-500',
 });
+
+router.beforeEach(() => {
+  NProgress.start();
+});
+
+router.afterEach(() => NProgress.done());
 
 export default router;
