@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
+import { createRouter, type RouteRecordRaw, createWebHashHistory } from 'vue-router';
 import useUserStore from '@/stores/user';
 import { start, done } from 'nprogress';
 
@@ -39,7 +39,7 @@ const routes: RouteRecordRaw[] = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes,
   linkExactActiveClass: 'text-yellow-500',
 });
