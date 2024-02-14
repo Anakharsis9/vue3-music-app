@@ -1,8 +1,4 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
-import Home from '@/views/HomeView.vue';
-import About from '@/views/AboutView.vue';
-import Manage from '@/views/ManageView.vue';
-import Song from '@/views/SongView.vue';
 
 import useUserStore from '@/stores/user';
 
@@ -10,22 +6,22 @@ const routes: RouteRecordRaw[] = [
   {
     name: 'home',
     path: '/',
-    component: Home,
+    component: () => import('@/views/HomeView.vue'),
   },
   {
     name: 'about',
     path: '/about',
-    component: About,
+    component: () => import('@/views/AboutView.vue'),
   },
   {
     name: 'song',
     path: '/song/:id',
-    component: Song,
+    component: () => import('@/views/SongView.vue'),
   },
   {
     name: 'manage',
     path: '/manage',
-    component: Manage,
+    component: () => import('@/views/ManageView.vue'),
     meta: {
       requiredAuth: true,
     },
