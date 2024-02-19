@@ -1,6 +1,13 @@
-# music
+# Vue 3 Music App with TypeScript, Pinia, and Firebase 
 
-This template should help get you started developing with Vue 3 in Vite.
+This project is a modern web application built using Vue 3, TypeScript, Pinia for state management, and Firebase for backend services. The application aims to provide users with a seamless experience for discovering, listening to, and managing their favorite music tracks.
+
+Link for demo: [View project](https://anakharsis9.github.io/vue3-music-app/#/)
+
+## Features
+- **User Authentication**: Users can sign up, log in, and securely authenticate using Firebase Authentication.
+- **Music Playback**: Users can listen to tracks with smooth playback functionality.
+- **Track Management**: Users can upload, edit, and delete songs.
 
 ## Recommended IDE Setup
 
